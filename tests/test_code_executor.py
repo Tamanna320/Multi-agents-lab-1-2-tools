@@ -128,7 +128,7 @@ class TestWriteExecReadRoundtrip:
             "from collections import Counter\n"
             "words = 'the quick brown fox jumps over the lazy dog'.split()\n"
             "counts = Counter(words)\n"
-            f"with open('{output_path}', 'w') as f:\n"
+            f"with open({output_path!r}, 'w') as f:\n"
             "    for word, count in sorted(counts.items()):\n"
             "        f.write(f'{word}: {count}\\n')\n"
             "print('Word count written.')\n"

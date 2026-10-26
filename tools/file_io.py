@@ -51,7 +51,22 @@ def read_file(path: str) -> str:
     Failure : "Error reading file '/src/utils.py': No such file or directory."
     """
     # TODO: implement read_file
-    raise NotImplementedError("Implement read_file in tools/file_io.py")
+    
+    try:
+        absolute_path = os.path.abspath(path)
+
+        with open(absolute_path, "r", encoding="utf-8") as file:
+            return file.read()
+
+    except FileNotFoundError:
+        return f"Error reading file '{path}': No such file or directory."
+
+    except PermissionError:
+        return f"Error reading file '{path}': Permission denied."
+
+    except Exception as e:
+        return f"Error reading file '{path}': {e}"
+
 
 
 def write_file(path: str, content: str) -> str:
@@ -91,4 +106,28 @@ def write_file(path: str, content: str) -> str:
     Failure : "Error writing file '/read-only/file.py': Permission denied."
     """
     # TODO: implement write_file
-    raise NotImplementedError("Implement write_file in tools/file_io.py")
+   
+   
+    try:
+        if path.startswith("/dev/null/"):
+            return f"Error writing file '{path}': Invalid path."
+
+        parent = os.path.dirname(path)
+
+        if parent:
+            os.makedirs(parent, exist_ok=True)
+
+        with open(path, "w", encoding="utf-8") as file:
+            file.write(content)
+
+        lines_written = len(content.splitlines())
+
+        return f"File written successfully. {lines_written} lines."
+
+    except PermissionError:
+        return f"Error writing file '{path}': Permission denied."
+
+    except Exception as e:
+        return f"Error writing file '{path}': {e}"
+
+
